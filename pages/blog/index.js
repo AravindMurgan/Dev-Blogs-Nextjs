@@ -3,6 +3,7 @@ import matter from 'gray-matter';
 import Link from 'next/link';
 import path from 'path';
 import Layout from '../../components/Layout';
+import Post from '../../components/Post';
 
 export default function BlogPage({ posts }) {
 	console.log(posts);
@@ -10,7 +11,7 @@ export default function BlogPage({ posts }) {
 		<Layout title='Blog'>
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5 '>
 				{posts.map((post, index) => (
-					<h3>{post.frontmatter.title} </h3>
+					<Post key={index} post={post} />
 				))}
 			</div>
 
