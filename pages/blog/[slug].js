@@ -2,8 +2,8 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import Link from 'next/link';
 import path from 'path';
-import CategoryLabel from '../../components/CategoryLabel';
-import Layout from '../../components/Layout';
+import CategoryLabel from '@/components/CategoryLabel';
+import Layout from '@/components/Layout';
 import marked from 'marked'
 
 export default function PostPage({
