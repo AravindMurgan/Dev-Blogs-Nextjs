@@ -6,7 +6,7 @@ import Post from '../../../components/Post';
 import { POSTS_PER_PAGE } from '../../../config';
 import { sortByDate } from '../../../utils';
 
-export default function BlogPage({ posts }) {
+export default function BlogPage({ posts,numPages,currentPage }) {
 	console.log(posts);
 	return (
 		<Layout title='Blog'>
@@ -24,23 +24,25 @@ export default function BlogPage({ posts }) {
 export async function getStaticPaths() {
 	const files = fs.readdirSync(path.join('posts'));
 
-    const numPages = Math.ceil(files.length / POSTS_PER_PAGE)
+	const numPages = Math.ceil(files.length / POSTS_PER_PAGE);
 
-    let paths = []
+	let paths = [];
 
-    for(let i=1 ; i<= numPages; i++ ){
-        paths.push({
-            params: {page_index: i.toString()}
-        })
-    }
-    console.log(paths);
-    return {
-        paths,
-        fallback: false
-    }
+	for (let i = 1; i <= numPages; i++) {
+		paths.push({
+			params: { page_index: i.toString() },
+		});
+	}
+
+	return {
+		paths,
+		fallback: false,
+	};
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps = async ({ params }) => {
+	const page = parseInt((params && params.page_index) || 1);
+
 	const files = fs.readdirSync(path.join('posts'));
 
 	const posts = files.map((filename) => {
@@ -59,9 +61,17 @@ export const getStaticProps = async () => {
 		};
 	});
 
+	const numPages = Math.ceil(files.length / POSTS_PER_PAGE);
+	const pageIndex = page - 1;
+	const orderedPosts = posts
+		.sort(sortByDate)
+		.slice(pageIndex  * POSTS_PER_PAGE, (pageIndex + 1) * POSTS_PER_PAGE);
+
 	return {
 		props: {
-			posts: posts.sort(sortByDate),
+			numPages,
+			currentPage: page,
+			posts: orderedPosts,
 		},
 	};
 };
