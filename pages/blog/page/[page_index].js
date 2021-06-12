@@ -2,9 +2,11 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 import Layout from '../../../components/Layout';
+import Pagination from '../../../components/Pagination';
 import Post from '../../../components/Post';
 import { POSTS_PER_PAGE } from '../../../config';
 import { sortByDate } from '../../../utils';
+
 
 export default function BlogPage({ posts,numPages,currentPage }) {
 	console.log(posts);
@@ -17,6 +19,8 @@ export default function BlogPage({ posts,numPages,currentPage }) {
 					<Post key={index} post={post} />
 				))}
 			</div>
+
+			<Pagination currentPage={currentPage} numPages={numPages} />
 		</Layout>
 	);
 }
