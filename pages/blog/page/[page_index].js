@@ -1,15 +1,12 @@
-import fs from 'fs';
-import path from 'path';
 import Layout from '@/components/Layout';
 import Pagination from '@/components/Pagination';
 import Post from '@/components/Post';
 import { POSTS_PER_PAGE } from '@/config/index';
-import { sortByDate } from '@/utils/index';
 import { getPosts } from '@/lib/posts';
+import fs from 'fs';
+import path from 'path';
 
-
-export default function BlogPage({ posts,numPages,currentPage }) {
-	console.log(posts);
+export default function BlogPage({ posts, numPages, currentPage }) {
 	return (
 		<Layout title='Blog'>
 			<h1 className='text-5xl border-b-4 p-5 font-bold'>Blogs</h1>
@@ -49,12 +46,21 @@ export const getStaticProps = async ({ params }) => {
 
 	const files = fs.readdirSync(path.join('posts'));
 
-	const posts = getPosts()
+	const posts = getPosts();
+
+	//unqiue-categories//
+	const categories = posts.map((post) => post.frontmatter.category);
+	
+	const uniqueCategories = [...new Set(categories)]
+
+	console.log(uniqueCategories);
 
 	const numPages = Math.ceil(files.length / POSTS_PER_PAGE);
 	const pageIndex = page - 1;
-	const orderedPosts = posts
-		.slice(pageIndex  * POSTS_PER_PAGE, (pageIndex + 1) * POSTS_PER_PAGE);
+	const orderedPosts = posts.slice(
+		pageIndex * POSTS_PER_PAGE,
+		(pageIndex + 1) * POSTS_PER_PAGE
+	);
 
 	return {
 		props: {
