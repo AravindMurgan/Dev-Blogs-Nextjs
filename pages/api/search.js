@@ -2,7 +2,6 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
-import { title } from 'process';
 
 export default (req, res) => {
 	let posts;
@@ -13,6 +12,9 @@ export default (req, res) => {
 		const files = fs.readdirSync(path.join('posts'));
 
 		posts = files.map((filename) => {
+
+      const slug = filename.replace('.md', '')
+
 			const markdownWithMeta = fs.readFileSync(
 				path.join('posts', filename),
 				'utf-8'
@@ -21,15 +23,16 @@ export default (req, res) => {
 			const { data:frontmatter } = matter(markdownWithMeta);
 
       return {
+        slug,
         frontmatter,
       }
 		});
 
-    const results = posts.filter(({frontmatter:title,excerpt,category})=>( 
+    const results = posts.filter(({frontmatter:{title,excerpt,category}})=>
       title.toLowerCase().indexOf(req.query.q) != -1 ||
       excerpt.toLowerCase().indexOf(req.query.q) != -1 ||
       category.toLowerCase().indexOf(req.query.q) != -1 
-    ) )
+     )
 
     console.log(results);
 	
