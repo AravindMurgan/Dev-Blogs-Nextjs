@@ -12,31 +12,28 @@ export default (req, res) => {
 		const files = fs.readdirSync(path.join('posts'));
 
 		posts = files.map((filename) => {
-
-      const slug = filename.replace('.md', '')
+			const slug = filename.replace('.md', '');
 
 			const markdownWithMeta = fs.readFileSync(
 				path.join('posts', filename),
 				'utf-8'
 			);
 
-			const { data:frontmatter } = matter(markdownWithMeta);
+			const { data: frontmatter } = matter(markdownWithMeta);
 
-      return {
-        slug,
-        frontmatter,
-      }
+			return {
+				slug,
+				frontmatter,
+			};
 		});
-
-    const results = posts.filter(({frontmatter:{title,excerpt,category}})=>
-      title.toLowerCase().indexOf(req.query.q) != -1 ||
-      excerpt.toLowerCase().indexOf(req.query.q) != -1 ||
-      category.toLowerCase().indexOf(req.query.q) != -1 
-     )
-
-    console.log(results);
-	
 	}
 
-	res.status(200).json({ name: 'John Doe' });
+	const results = posts.filter(
+		({ frontmatter: { title, excerpt, category } }) =>
+			title.toLowerCase().indexOf(req.query.q) != -1 ||
+			excerpt.toLowerCase().indexOf(req.query.q) != -1 ||
+			category.toLowerCase().indexOf(req.query.q) != -1
+	);
+
+	res.status(200).json(JSON.stringify({ results }));
 };
