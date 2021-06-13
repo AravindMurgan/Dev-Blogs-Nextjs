@@ -1,3 +1,4 @@
+import CategoryList from '@/components/CategoryList';
 import Layout from '@/components/Layout';
 import Pagination from '@/components/Pagination';
 import Post from '@/components/Post';
@@ -23,7 +24,7 @@ export default function BlogPage({ posts, numPages, currentPage, categories }) {
 				</div>
 				
 				<div className='w-1/4' >
-					<CategoryList />
+					<CategoryList categories={categories}  />
 				</div>
 
 			</div>
