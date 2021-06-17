@@ -8,6 +8,7 @@ export default (req, res) => {
 
 	if (process.env.NODE_ENV === 'production') {
 		//todo - cache data
+		posts = require('../../cache/data').posts
 	} else {
 		const files = fs.readdirSync(path.join('posts'));
 
