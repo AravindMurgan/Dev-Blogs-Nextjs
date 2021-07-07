@@ -3,6 +3,8 @@ import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
 
+
+///Search-function//
 export default (req, res) => {
 	let posts;
 
